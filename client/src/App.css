@@ -1,0 +1,47 @@
+#root {
+  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+  margin: 0 !important;
+  display: flex;
+  min-height: 100vh;
+  justify-content: center;
+  padding: 4rem;
+  text-align: center;
+  color: rgb(239, 251, 255);
+  background-color: #213547;
+  --btn-background: #7ab5c6;
+  --btn-text: rgb(239, 251, 255);
+}
+
+body {
+  place-items: top;
+  background-color: #213547;
+  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+
+/* Space between the dropdowns */
+.two.fields {
+  display: flex;
+  gap: 1rem;
+  
+}
+
+/* Equal width for both dropdowns */
+.field {
+  flex: 1;
+  
+}
+
+.dropdown {
+  padding: 10px;
+  border-radius: 5px;
+  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+  font-weight: 600;
+  color: var(--btn-text);
+  background-color: var(--btn-background);
+  width: 10em;
+}
+
+.btn-find-movies {
+  font-weight: 600;
+  font-size: 20px;
+}
