@@ -3,12 +3,14 @@ import popcorn from './images/popcorn.png'
 import './App.css';
 import "semantic-ui-css/semantic.min.css";
 import SearchForm from './components/SearchForm';
+import Nav from './components/Nav';
 
 function App() {
   //const [count, setCount] = useState(0)
   return (
     <>
       <div>
+        <Nav />
         <h1 className="knewave-regular">
           <img src={popcorn} alt="Popcorn Icon" width={100} className="filmpop-logo"></img>FilmPop
         </h1>
