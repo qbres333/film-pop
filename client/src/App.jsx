@@ -1,17 +1,16 @@
-import { useState } from 'react'
+// import { useState } from 'react'
 import popcorn from './images/popcorn.png'
 import './App.css';
 import "semantic-ui-css/semantic.min.css";
 import SearchForm from './components/SearchForm';
 
 function App() {
-  const [count, setCount] = useState(0)
-
+  //const [count, setCount] = useState(0)
   return (
     <>
       <div>
         <h1 className="knewave-regular">
-          <img src={popcorn} width={100} className="filmpop-logo"></img>FilmPop
+          <img src={popcorn} alt="Popcorn Icon" width={100} className="filmpop-logo"></img>FilmPop
         </h1>
         <SearchForm />
       </div>
@@ -19,7 +18,7 @@ function App() {
   );
 }
 
-export default App
+export default App;
 
 /** 
         <a href="https://vite.dev" target="_blank">
