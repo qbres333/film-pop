@@ -10,10 +10,10 @@ function App() {
   return (
     <>
       <div>
-        <h1>
+        <h1 className="knewave-regular">
           <img src={popcorn} width={100} className="filmpop-logo"></img>FilmPop
         </h1>
-        <SearchForm/>
+        <SearchForm />
       </div>
     </>
   );
