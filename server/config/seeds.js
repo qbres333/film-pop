@@ -1,11 +1,7 @@
 const db  = require('./connection');
 const User  = require("../models");
-// const cleanDB = require("./cleanDB");
-
 
 db.once('open', async () => {
-    // await cleanDB("users");
-    // delete the users collection if it exists
     let userCheck = await db.db.listCollections({ name: 'users' }).toArray();
     if(userCheck.length) {
       await db.dropCollection('users');

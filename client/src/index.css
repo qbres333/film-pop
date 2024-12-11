@@ -25,11 +25,6 @@ a:hover {
 }
 
 
-h1 {
-  /* font-size: 3.2em; */
-  /* line-height: 1.1; */
-}
-
 button {
   border-radius: 8px;
   border: 1px solid transparent;
@@ -43,7 +38,8 @@ button {
   transition: border-color 0.25s;
 }
 button:hover {
-  border-color: #646cff;
+  border-color: #7e84f5;
+  border-width: 2px;
 }
 button:focus,
 button:focus-visible {

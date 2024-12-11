@@ -1,6 +1,4 @@
 // search form with options for genre and rating
-// import semantic UI
-
 
 // genre options
 const genreOptions = [
