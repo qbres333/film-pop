@@ -29,15 +29,15 @@ const SignupForm = () => {
         const validateForm = () => {
             let formErrors = {};
 
-            if (!formData.username) {
+            if (!userFormData.username) {
                 formErrors.username = 'Username is required to signup.';
             }
 
-            if (!formData.email) {
+            if (!userFormData.email) {
                 formErrors.email = 'Email is required to signup.';
             }
 
-            if (!formData.password) {
+            if (!userFormData.password) {
                 formErrors.password = 'Password is required to signup';
             }
 
@@ -63,8 +63,28 @@ const SignupForm = () => {
     };
 
     return (
-        <></>
-    )
+        <>
+            <div>
+                <h2>Signup Form</h2>
+                <form onSubmit={handleSubmit}>
+=                    <div>
+                        <label>Username</label>
+                        <input
+                            type="text"
+                            id="username"
+                            name="username"
+                            value={userFormData.username}
+                            onChange={handleChange}
+                        />
+                    </div>
+
+                    <div>
+                        <button>Sign Up</button>
+                    </div>
+                </form>
+            </div>
+        </>
+    );
 }
 
 export default SignupForm;
