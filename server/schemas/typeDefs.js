@@ -10,9 +10,22 @@ const typeDefs = `
       user: User
     }
 
+    type Movie {
+      _id: ID!
+      poster: String
+      title: String!
+      genre: [String]
+      plot: String
+      runtime: Int
+      year: Int
+      imdbRating: Float
+    }
+
     type Query {
       user: User
+      moviesByGenreAndRating(genres: String!, imdbRating: Int!): [Movie]
     }
+
     type Mutation {
       addUser(
         username: String!
