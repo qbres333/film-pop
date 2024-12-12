@@ -1,5 +1,6 @@
-const { User } = require("../models");
+const { User, Movie } = require("../models");
 const { signToken, AuthenticationError } = require("../utils/auth");
+const database = require("../config/connection");
 
 const resolvers = {
   Query: {
@@ -20,6 +21,23 @@ const resolvers = {
         throw Error("User not authenticated");
       }
     },
+    moviesByGenreAndRating: async (_, {genre, imdbRating}) => {
+      let db = database.getDb();
+      const minRating = imdbRating -1;
+      const maxRating = imdbRating +1;
+
+      const movieCriteria = [
+        {
+          $match: {
+            genres: genre,
+            "imdb.rating": { $gt: minRating, $lte: maxRating },
+          },
+        },
+        { $sample: { size: 5 } },
+      ];
+      const randomMovies = await db.collection("movies").aggregate(movieCriteria).toArray();
+      return randomMovies;
+    }
   },
 
   Mutation: {

@@ -1,6 +1,6 @@
 // from MongoDB Atlas connect instructions
 const { MongoClient, ServerApiVersion } = require("mongodb");
-require("dotenv").config();
+require("dotenv").config({path: '../.env'});
 
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
 const client = new MongoClient(process.env.MONGO_ATLAS_URI, {

@@ -6,8 +6,6 @@ const path = require("path");
 const { authMiddleware } = require("./utils/auth");
 // import mongoose connection
 const db = require("./config/connection");
-// import movieRoutes
-const movies = require('./utils/movieRoutes');
 
 // load environment variables from .env file
 require("dotenv").config();
@@ -30,8 +28,6 @@ const startApolloServer = async () => {
 
   app.use(express.urlencoded({ extended: false }));
   app.use(express.json());
-  // mount movie routes
-  app.use(movies);
 
   app.use(
     "/graphql",
@@ -54,6 +50,7 @@ const startApolloServer = async () => {
     console.log(`API server running on port ${PORT}!`);
     console.log(`Use GraphQL at http://localhost:${PORT}/graphql`);
   });
+
 };
 
 // Call the async function to start the server
