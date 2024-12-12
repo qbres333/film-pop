@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { Form, Button, Message, Input } from 'semantic-ui-react';
 
 const SignupForm = () => {
     // set initial form state
@@ -19,7 +20,7 @@ const SignupForm = () => {
     const handleChange = (event) => {
         const { name, value } = event.target;
         setUserFormData({
-            ...formData,
+            ...userFormData,
             [name]: value,
         });
     };
@@ -62,27 +63,94 @@ const SignupForm = () => {
         }
     };
 
+    // Referred to module 21 challenge assignment
     return (
         <>
-            <div>
-                <h2>Signup Form</h2>
-                <form onSubmit={handleSubmit}>
-=                    <div>
-                        <label>Username</label>
-                        <input
-                            type="text"
-                            id="username"
-                            name="username"
-                            value={userFormData.username}
-                            onChange={handleChange}
-                        />
-                    </div>
+            {/* This is needed for the validation functionality */}
+            <Form noValidate validated={validated} onSubmit={handleSubmit}>
 
-                    <div>
-                        <button>Sign Up</button>
-                    </div>
-                </form>
-            </div>
+                {/* Show alert if server response is bad */}
+                {showAlert && (
+                    <Message
+                        error
+                        onDismiss={() => setShowAlert(false)}
+                        header="Something went wrong with your signup!"
+                    />
+                )}
+
+                {/* Username Field */}
+                <Form.Field required>
+                    <label htmlFor="username">Username</label>
+                    <Input
+                        type="text"
+                        placeholder="Your username"
+                        name="username"
+                        onChange={handleChange}
+                        value={userFormData.username}
+                        fluid
+                    />
+                    {!userFormData.username && validated && (
+                        <Message
+                            error
+                            content="Username is required!"
+                        />
+                    )}
+                </Form.Field>
+
+                {/* Email Field */}
+                <Form.Field required>
+                    <label htmlFor="email">Email</label>
+                    <Input
+                        type="email"
+                        placeholder="Your email address"
+                        name="email"
+                        onChange={handleChange}
+                        value={userFormData.email}
+                        fluid
+                    />
+                    {!userFormData.email && validated && (
+                        <Message
+                            error
+                            content="Email is required!"
+                        />
+                    )}
+                </Form.Field>
+
+
+                {/* Password Field */}
+                <Form.Field required>
+                    <label htmlFor="password">Password</label>
+                    <Input
+                        type="password"
+                        placeholder="Your password"
+                        name="password"
+                        onChange={handleChange}
+                        value={userFormData.password}
+                        fluid
+                    />
+                    {!userFormData.password && validated && (
+                        <Message
+                            error
+                            content="Password is required!"
+                        />
+                    )}
+                </Form.Field>
+
+                {/* Submit Button */}
+                <Button
+                    type="submit"
+                    primary
+                    disabled={
+                        !(
+                            userFormData.username &&
+                            userFormData.email &&
+                            userFormData.password
+                        )
+                    }
+                >
+                    Submit
+                </Button>
+            </Form>
         </>
     );
 }
