@@ -1,14 +1,14 @@
 import React from 'react';
-import { FormInput, Button, Form } from 'semantic-ui-react';
+import { FormInput, Button, Form, Input} from 'semantic-ui-react';
 
 
 export default function Signup() {
   return (
     <>
-      <Form >
+      <Form>
         <FormInput 
           label={<label style={{ color: 'white' }}>Username</label>} 
-          placeholder='username'
+          focus placeholder='username'
           fluid
           id='form-input-username'
         />
@@ -22,7 +22,7 @@ export default function Signup() {
           placeholder='*********' 
           fluid
         />
-        <Button>Submit</Button>
+        <Button inverted color='blue' size='large' floated='left'>Sign up</Button>
       </Form>
     </>
   );
