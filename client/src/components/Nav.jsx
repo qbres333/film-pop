@@ -1,11 +1,12 @@
 // Contains the navbar
 import React from 'react';
 import { ButtonOr, ButtonGroup, Button } from 'semantic-ui-react';
+import Header from "./Header";
 
 function Nav({ currentPage, handlePageChange }) {
     return (
         <div>
-            <ButtonGroup ButtonGroup size='medium' floated='right' inverted color='blue'>
+            <ButtonGroup className='login-signup' ButtonGroup size='medium' floated='right' inverted color='blue'>
                 <Button>
                     <a
                         href="#signup"
@@ -26,6 +27,7 @@ function Nav({ currentPage, handlePageChange }) {
                     </a>
                 </Button>
             </ButtonGroup>
+            <Header />
         </div>
     );
 }
