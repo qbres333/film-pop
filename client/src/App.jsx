@@ -13,7 +13,7 @@ import { Outlet } from "react-router-dom";
 import Nav from './components/Nav';
 
 const httpLink = createHttpLink({
-  uri: "http://localhost:3001/graphql",
+  uri: "/graphql",
 });
 
 // Construct request middleware that will attach the JWT token to every request as an `authorization` header
@@ -38,14 +38,16 @@ const client = new ApolloClient({
 
 function App() {
   return (
-    <ApolloProvider client={client}>
-      <div>
-        <Nav />
-        <div className="container">
-          <Outlet />
+    <>
+      <ApolloProvider client={client}>
+        <div>
+          <Nav />
+          <div className="container">
+            <Outlet />
+          </div>
         </div>
-      </div>
-    </ApolloProvider>
+      </ApolloProvider>
+    </>
   );
 }
 

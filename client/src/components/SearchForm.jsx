@@ -1,4 +1,4 @@
-// search form with options for genre and rating
+// search form with options for genre and imdbRating
 // import search options
 import { genreOptions, ratingOptions } from "../utils/searchOptions";
 // import hooks
@@ -12,18 +12,21 @@ import { Form, FormGroup, Button, Container } from "semantic-ui-react";
 export default function SearchForm() {
 
   // create state for holding search criteria
-  const [searchFormData, setSearchFormData] = useState({ genre: '', rating: ''});
+  const [searchFormData, setSearchFormData] = useState({ genre: '', imdbRating: null});
   // create state for when form is submitted
   const [isSubmitted, setIsSubmitted] = useState(false);
   
   const { loading, error, data } = useQuery(QUERY_MOVIES, {
-    variables: { ...searchFormData },
+    variables: { genre: searchFormData.genre, imdbRating: searchFormData.imdbRating },
     skip: !isSubmitted,
   });
+
   const movies = data?.movies || [];
 
   // function to handle field change
   const handleChange = (event) => {
+    event.preventDefault();
+
     const { name, value } = event.target;
     setSearchFormData({ ...searchFormData, [name]: value});
   }
@@ -36,7 +39,7 @@ export default function SearchForm() {
     // reset form fields
     setSearchFormData({
       genre: '',
-      rating: '',
+      imdbRating: null,
     });
   }
     
@@ -62,14 +65,14 @@ export default function SearchForm() {
                 </select>
               </Form.Field>
 
-              <Form.Field className="field rating" width={5} required>
+              <Form.Field className="field imdbRating" width={5} required>
                 <select
-                  className="dropdown select-rating"
-                  name="rating"
-                  value={searchFormData.rating}
+                  className="dropdown select-imdbRating"
+                  name="imdbRating"
+                  value={searchFormData.imdbRating}
                   onChange={handleChange}
                 >
-                  <option value="">Select Rating</option>
+                  <option value={undefined}>Select Rating</option>
                   {ratingOptions.map((option) => (
                     <option key={option.key} value={option.value}>
                       {option.text}
@@ -84,7 +87,7 @@ export default function SearchForm() {
               type="submit"
               size="huge"
               className="btn-find-movies"
-              disabled={!searchFormData}
+              disabled={!searchFormData.genre || !searchFormData.imdbRating}
             >
               Find Movies!
             </Button>

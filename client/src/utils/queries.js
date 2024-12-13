@@ -1,12 +1,12 @@
 import { gql } from "@apollo/client";
 
 export const QUERY_MOVIES = gql`
-  query findMovies($genre: String!, $rating: Float) {
-    moviesByGenreAndRating(genre: $genre, rating: $rating) {
+  query MoviesByGenreAndRating($genre: String, $imdbRating: Float) {
+    moviesByGenreAndRating(genre: $genre, imdbRating: $imdbRating) {
       _id
       title
       poster
-      genres
+      genre
       plot
       runtime
       year

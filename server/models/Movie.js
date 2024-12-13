@@ -10,7 +10,7 @@ const movieSchema = new Schema({
   poster: {
     type: String,
   },
-  genres: [{ type: String }], // array of strings
+  genre: [{ type: String }], // array of strings
   plot: {
     type: String,
   },

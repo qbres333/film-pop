@@ -20,32 +20,34 @@ const resolvers = {
         throw Error("User not authenticated");
       }
     },
-    moviesByGenreAndRating: async (parent, args) => {
-      const minRating = args.rating - 1;
-      const maxRating = args.rating + 1;
+    moviesByGenreAndRating: async (parent, { genre, imdbRating}) => {
+      const minRating = imdbRating - 1;
+      const maxRating = imdbRating + 1;
+
+      // const randomMovies = await Movie.find(
+      //   {
+      //     genre: { $in: [genre] },
+      //     imdbRating: { $gt: minRating, $lte: maxRating },
+      //   },
+      // );
 
       const randomMovies = await Movie.aggregate([
         {
           $match: {
-            genres: args.genre,
+            genre: { $in: [genre] },
             imdbRating: { $gt: minRating, $lte: maxRating },
           },
         },
-        { $sample: { size: 1 } },
         {
-          $project: {
-            _id: 1,
-            title: 1,
-            poster: 1,
-            genres: 1,
-            plot: 1,
-            runtime: 1,
-            year: 1,
-            imdbRating: 1,
-          },
+          $sample: { size: 3 }, // Limit to 3 random movies
         },
       ]);
-      // console.log("movies:", randomMovies);
+
+      if (!randomMovies || randomMovies.length === 0) {
+        console.error("No movies found for the given criteria");
+      }
+
+      console.log("movies:", randomMovies);
       return randomMovies;
     },
   },
