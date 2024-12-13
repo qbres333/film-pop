@@ -16,3 +16,14 @@ export const QUERY_MOVIES = gql`
     }
   }
 `;
+
+export const QUERY_USER = gql`
+  {
+    me {
+      _id
+      username
+      email
+    }
+  }
+`;
+

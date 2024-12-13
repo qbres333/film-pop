@@ -1,5 +1,18 @@
 import { useState, useEffect } from 'react';
-import { Form, Button, Message, Input } from 'semantic-ui-react';
+import {
+    ModalHeader,
+    ModalContent,
+    ModalActions,
+    Button,
+    Modal,
+    Form, 
+    Message, 
+    Input,
+  } from 'semantic-ui-react'
+
+import { useMutation } from '@apollo/client';
+import { ADD_USER } from '../utils/mutations';
+import Auth from '../utils/auth';
 
 const SignupForm = () => {
     // set initial form state
@@ -9,12 +22,27 @@ const SignupForm = () => {
         password: '',
     });
 
-    // set state for error messages
-    const [errors, setErrors] = useState({
-        name: '',
-        email: '',
-        password: '',
-    });
+    // set state for form validation
+    const [validated] = useState(false);
+
+    // set state for alert
+    const [showAlert, setShowAlert] = useState(false);
+    // set state for success
+    const [successMessage, setSuccessMessage] = useState('');
+    // Modal state to control visibility
+    const [openModal, setOpenModal] = useState(false);
+
+    const [addUser, { error }] = useMutation(ADD_USER);
+
+    // set state to handle error messages / alerts
+    useEffect(() => {
+        if (error) {
+            setShowAlert(true);
+        } else {
+            setShowAlert(false);
+        }
+    }, [error]);
+
 
     // Handle signup form input change
     const handleChange = (event) => {
@@ -25,49 +53,51 @@ const SignupForm = () => {
         });
     };
 
-    // Make sure email, password, and username is not empty
-    useEffect(() => {
-        const validateForm = () => {
-            let formErrors = {};
-
-            if (!userFormData.username) {
-                formErrors.username = 'Username is required to signup.';
-            }
-
-            if (!userFormData.email) {
-                formErrors.email = 'Email is required to signup.';
-            }
-
-            if (!userFormData.password) {
-                formErrors.password = 'Password is required to signup';
-            }
-
-            setErrors(formErrors);
-        };
-
-        validateForm();
-    }, [formData]);
 
     // Handle form submission
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault();
 
-        if (validateForm()) {
-            alert('Congrats! You have signed up successfully!');
-            // Clear form after submission
-            setUserFormData({
-                name: '',
-                email: '',
-                password: '',
-            });
+        // Make sure email, password, and username is not empty
+        if (!userFormData.username || !userFormData.email || !userFormData.password) {
+            return;
         }
+
+        try {
+            const { data } = await addUser({
+                variables: { ...userFormData },
+            });
+            console.log(data);
+            Auth.login(data.addUser.token);
+            setSuccessMessage('Nice, you have signed up successfully!');
+            setOpenModal(true); // Open the modal on successful signup
+        } catch (err) {
+            console.error(err);
+            setSuccessMessage('');
+        }
+
+        // Clear form after submission
+        setUserFormData({
+            name: '',
+            email: '',
+            password: '',
+        });
     };
 
     // Referred to module 21 challenge assignment
     return (
         <>
             {/* This is needed for the validation functionality */}
-            <Form noValidate validated={validated} onSubmit={handleSubmit}>
+            <Form onSubmit={handleSubmit}>
+
+                {/* Show success message */}
+                {successMessage && (
+                    <Message
+                        success
+                        onDismiss={() => setSuccessMessage('')}
+                        header={successMessage}
+                    />
+                )}
 
                 {/* Show alert if server response is bad */}
                 {showAlert && (
@@ -151,8 +181,28 @@ const SignupForm = () => {
                     Submit
                 </Button>
             </Form>
+
+            {/* Modal for signup success message */}
+            <Modal
+                open={openModal}
+                onClose={() => setOpenModal(false)} // Close modal
+                size="small"
+            >
+                <ModalHeader>You have signed up successfully</ModalHeader>
+                <ModalContent>
+                    <p>{successMessage}</p>
+                </ModalContent>
+                <ModalActions>
+                    <Button
+                        onClick={() => setOpenModal(false)} // Close modal on click
+                        positive
+                    >
+                        Close
+                    </Button>
+                </ModalActions>
+            </Modal>
         </>
     );
-}
+};
 
 export default SignupForm;
