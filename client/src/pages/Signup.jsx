@@ -1,29 +1,102 @@
 import React from 'react';
-import { FormInput, Button, Form, Input} from 'semantic-ui-react';
+import { useState } from 'react';
+import { Link } from 'react-router-dom';
+import { FormInput, Button, Form, Header } from 'semantic-ui-react';
 
+import { useMutation } from '@apollo/client';
+import { ADD_USER } from '../utils/mutations';
 
-export default function Signup() {
+import Auth from '../utils/auth';
+
+const Signup = () => {
+  const [formState, setFormState] = useState({
+    username: '',
+    email: '',
+    password: '',
+  });
+  const [addUser, { error, data }] = useMutation(ADD_USER);
+
+  // update state based on form input changes
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+
+    setFormState({
+      ...formState,
+      [name]: value,
+    });
+  };
+
+  // submit form
+  const handleFormSubmit = async (event) => {
+    event.preventDefault();
+    console.log(formState);
+
+    try {
+      const { data } = await addUser({
+        variables: { ...formState },
+      });
+
+      Auth.login(data.addUser.token);
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
   return (
     <>
-      <Form>
-        <FormInput 
-          label={<label style={{ color: 'white' }}>Username</label>} 
-          focus placeholder='username'
-          fluid
-          id='form-input-username'
+      <h1 as='h3' textAlign='center' className='knewave-signup'> Sign Up Form </h1>
+      {data ? (
+        <p>
+          Success! You may now head{' '}
+          <Link to="/">back to the homepage.</Link>
+        </p>
+      ) : (
+        <Form onSubmit={handleFormSubmit}>
+          <FormInput
+            label={<label className='knewave-input' style={{ color: 'white', textAlign: 'left' }}>Username:</label>}
+            placeholder="Your username"
+            name="username"
+            type="text"
+            value={formState.username}
+            onChange={handleChange}
+          />
+          <FormInput
+            label={<label className='knewave-input' style={{ color: 'white', textAlign: 'left' }}>Email:</label>}
+            placeholder="Enter your email"
+            name="email"
+            type="email"
+            value={formState.email}
+            onChange={handleChange}
+          />
+          <FormInput
+            label={<label className='knewave-input' style={{ color: 'white', textAlign: 'left' }}>Password:</label>}
+            placeholder="*********"
+            name="password"
+            type="password"
+            value={formState.password}
+            onChange={handleChange}
+          />
+          <Button
+            inverted color='blue'
+            size='large'
+            floated='left'
+            style={{ cursor: 'pointer' }}
+            type="submit"
+          >
+            Submit
+          </Button>
+        </Form>
+      )}
+
+      {error && (
+        <Message
+          error
+          header="Error signing up!"
+          content={error.message}
         />
-        <FormInput 
-          label={<label style={{ color: 'white' }}>Email</label>} 
-          placeholder='joe@hotmail.com'
-          fluid
-        />
-        <FormInput 
-          label={<label style={{ color: 'white' }}>Password</label>} 
-          placeholder='*********' 
-          fluid
-        />
-        <Button inverted color='blue' size='large' floated='left'>Sign up</Button>
-      </Form>
+      )}
     </>
   );
-}
+};
+
+export default Signup;
