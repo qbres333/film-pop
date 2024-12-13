@@ -14,16 +14,16 @@ const typeDefs = `
       _id: ID!
       poster: String
       title: String!
-      genre: [String]
+      genres: [String]
       plot: String
       runtime: Int
       year: Int
-      imdbRating: Float
+      rating: Float
     }
 
     type Query {
       user: User
-      moviesByGenreAndRating(genres: String!, imdbRating: Int!): [Movie]
+      moviesByGenreAndRating(genre: [String]!, rating: Float): [Movie]
     }
 
     type Mutation {

@@ -22,6 +22,8 @@
 
 .filmpop-container {
   display: flex;
+  justify-content: center;
+  padding-bottom: 3em;
 }
 
 .login-signup {
@@ -36,11 +38,13 @@ body {
 }
 
 .search-form {
-  margin-top: 3em;
+  margin-bottom: 1.5em;
 }
+
 /* Space between the dropdowns */
 .two.fields {
   display: flex;
+  justify-content: center;
   gap: 1rem;
   
 }
@@ -57,16 +61,16 @@ body {
   font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
   font-weight: 600;
   font-size: 20px;
-  color: var(--btn-text);
-  background-color: var(--btn-background);
-  width: 13em;
+  color: var(--btn-text) !important;
+  background-color: var(--btn-background) !important;
 }
 
 .btn-find-movies {
-  background-color: var(--background);
-  font-weight: 600;
-  font-size: 24px;
-  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+  color: var(--btn-text) !important;
+  background-color: var(--btn-background) !important;
+  font-weight: 600 !important;
+  font-size: 24px !important;
+  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif !important;
 }
 
 @media (max-width: 820px) {

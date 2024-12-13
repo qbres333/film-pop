@@ -10,7 +10,7 @@ const movieSchema = new Schema({
   poster: {
     type: String,
   },
-  genre: [{ type: String }], // array of strings
+  genres: [{ type: String }], // array of strings
   plot: {
     type: String,
   },
@@ -20,7 +20,7 @@ const movieSchema = new Schema({
   year: {
     type: Number,
   },
-  imdbRating: {
+  rating: {
     type: Number,
   },
 });

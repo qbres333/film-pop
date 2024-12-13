@@ -17,9 +17,8 @@ let database;
 module.exports = {
   connectToServer: () => {
     database = client.db("sample_mflix");
-  },
-  getDb: () => {
+    console.log('Connected to MongoDB Atlas');
     return database;
-  }
+  },
 }
 
