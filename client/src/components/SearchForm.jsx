@@ -1,81 +1,113 @@
 // search form with options for genre and rating
+// import search options
+import { genreOptions, ratingOptions } from "../utils/searchOptions";
+// import hooks
+import { useState } from "react";
+import { useQuery } from "@apollo/client";
+// import movie query
+import { QUERY_MOVIES } from "../utils/queries";
+// import react components
+import { Form, FormGroup, Button, Container } from "semantic-ui-react";
 
-// genre options
-const genreOptions = [
-  { key: 1, text: "Action", value: "Action" },
-  { key: 2, text: "Adventure", value: "Adventure" },
-  { key: 3, text: "Animation", value: "Animation" },
-  { key: 4, text: "Biography", value: "Biography" },
-  { key: 5, text: "Comedy", value: "Comedy" },
-  { key: 6, text: "Crime", value: "Crime" },
-  { key: 7, text: "Drama", value: "Drama" },
-  { key: 8, text: "Family", value: "Family" },
-  { key: 9, text: "Fantasy", value: "Fantasy" },
-  { key: 10, text: "History", value: "History" },
-  { key: 11, text: "Horror", value: "Horror" },
-  { key: 12, text: "Music", value: "Music" },
-  { key: 13, text: "Mystery", value: "Mystery" },
-  { key: 14, text: "Romance", value: "Romance" },
-  { key: 15, text: "Sci - Fi", value: "Sci - Fi" },
-  { key: 16, text: "Short", value: "Short" },
-  { key: 17, text: "Thriller", value: "Thriller" },
-  { key: 18, text: "War", value: "War" },
-  { key: 19, text: "Western", value: "Western" },
-];
+export default function SearchForm() {
 
-// rating options
-const ratingOptions = [
-  { key: 1, text: "Abysmal", value: "1" }, //rating 0 (inclusive) to 2
-  { key: 2, text: "Bad", value: "3" }, //rating 2 (inclusive) to 4
-  { key: 3, text: "Average", value: "5" }, //rating 4 (inclusive) to 6
-  { key: 4, text: "Good", value: "7" }, //rating 6 (inclusive) to 8
-  { key: 5, text: "Good", value: "9" }, //rating 8 (inclusive) to 10
-];
+  // create state for holding search criteria
+  const [searchFormData, setSearchFormData] = useState({ genre: '', rating: ''});
+  
+  const { loading, error, data } = useQuery(QUERY_MOVIES, {
+    variables: { ...searchFormData },
+  });
+  const movies = data?.movies || [];
 
-export default function SearchForm(props) {
+  // function to handle field change
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+    setSearchFormData({ ...searchFormData, [name]: value});
+  }
+
+  // function to handle movie search and set state on form submit
+  const handleFormSubmit = async (event) => {
+    event.preventDefault();
+
+    // reset form fields
+    setSearchFormData({
+      genre: '',
+      rating: '',
+    });
+  }
     
     return (
-      <div className="search-form">
-        <form className="form">
-          <div className="two fields">
-
-            <div className="field genres">
-              <div className="select-genre">
-                <select className="dropdown">
-                  <option value="" disabled selected>
-                    Select Genre
-                  </option>
+      <>
+        {/* search form */}
+        <Container>
+          <Form
+            className="search-form"
+            onSubmit={handleFormSubmit}
+          >
+            <FormGroup className="two fields">
+              <Form.Field className="field genre" width={5} required>
+                <select className="dropdown select-genre">
+                  <option value="">Select Genre</option>
                   {genreOptions.map((option) => (
-                    <option key={option.key} value={option.text}>
+                    <option
+                      key={option.key}
+                      value={option.value}
+                      name="genre"
+                      onChange={handleChange}
+                    >
                       {option.text}
                     </option>
                   ))}
                 </select>
-              </div>
-            </div>
+              </Form.Field>
 
-            <div className="field rating">
-              <div className="select-rating">
-                <select className="dropdown">
-                  <option value="" disabled selected>
-                    Select Rating
-                  </option>
+              <Form.Field className="field rating" width={5} required>
+                <select className="dropdown select-rating">
+                  <option value="">Select Rating</option>
                   {ratingOptions.map((option) => (
-                    <option key={option.key} value={option.text}>
+                    <option
+                      key={option.key}
+                      value={option.value}
+                      name="rating"
+                      onChange={handleChange}
+                    >
                       {option.text}
                     </option>
                   ))}
                 </select>
-              </div>
-            </div>
+              </Form.Field>
+            </FormGroup>
+            <br />
 
-        
-          </div>
-          <br />
+            <Button
+              type="submit"
+              size="huge"
+              className="btn-find-movies"
+              disabled={!searchFormData}
+            >
+              Find Movies!
+            </Button>
+          </Form>
+        </Container>
+        <br />
 
-          <button type="submit" className="btn-find-movies">Find Movies!</button>
-        </form>
-      </div>
+        {/* search results */}
+        <Container>
+          {loading && <div>Finding Movies...</div>}
+          {error && <div>Error fetching movies: {error.message}</div>}
+          {movies.length > 0 && (
+            <>
+              {/* map through movies and display data */}
+              {movies.map((movie) => (
+                <div key={movie._id}>
+                  <h3>{movie.title}</h3>
+                </div>
+              ))}
+            </>
+          )}
+          {movies.length === 0 && !loading && <div>No movies found matching your criteria! Please try again.</div>}
+        </Container>
+      </>
     );
 }
 
