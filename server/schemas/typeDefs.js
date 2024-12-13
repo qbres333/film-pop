@@ -18,12 +18,12 @@ const typeDefs = `
       plot: String
       runtime: Int
       year: Int
-      rating: Float
+      imdbRating: Float
     }
-
+      
     type Query {
       user: User
-      moviesByGenreAndRating(genre: [String]!, rating: Float): [Movie]
+      moviesByGenreAndRating(genre: [String]!, imdbRating: Float!): [Movie]
     }
 
     type Mutation {
