@@ -21,7 +21,6 @@ const resolvers = {
       }
     },
     moviesByGenreAndRating: async (parent, args) => {
-      console.log("ratings:", args.rating);
       const minRating = args.rating - 1;
       const maxRating = args.rating + 1;
 
@@ -29,10 +28,10 @@ const resolvers = {
         {
           $match: {
             genres: args.genre,
-            "imdb.rating": { $gt: minRating, $lte: maxRating },
+            imdbRating: { $gt: minRating, $lte: maxRating },
           },
         },
-        { $sample: { size: 5 } },
+        { $sample: { size: 1 } },
         {
           $project: {
             _id: 1,
@@ -42,11 +41,11 @@ const resolvers = {
             plot: 1,
             runtime: 1,
             year: 1,
-            "imdb.rating": 1,
+            imdbRating: 1,
           },
         },
-      ]).toArray();
-      console.log("movies:", randomMovies);
+      ]);
+      // console.log("movies:", randomMovies);
       return randomMovies;
     },
   },

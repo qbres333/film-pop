@@ -20,7 +20,7 @@ const movieSchema = new Schema({
   year: {
     type: Number,
   },
-  rating: {
+  imdbRating: {
     type: Number,
   },
 });
