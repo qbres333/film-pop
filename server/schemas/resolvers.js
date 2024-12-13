@@ -1,4 +1,4 @@
-const { User } = require("../models");
+const { User, Movie } = require("../models");
 const { signToken, AuthenticationError } = require("../utils/auth");
 
 const resolvers = {
@@ -19,6 +19,36 @@ const resolvers = {
       } else {
         throw Error("User not authenticated");
       }
+    },
+    moviesByGenreAndRating: async (parent, { genre, imdbRating}) => {
+      const minRating = imdbRating - 1;
+      const maxRating = imdbRating + 1;
+
+      // const randomMovies = await Movie.find(
+      //   {
+      //     genre: { $in: [genre] },
+      //     imdbRating: { $gt: minRating, $lte: maxRating },
+      //   },
+      // );
+
+      const randomMovies = await Movie.aggregate([
+        {
+          $match: {
+            genre: { $in: [genre] },
+            imdbRating: { $gt: minRating, $lte: maxRating },
+          },
+        },
+        {
+          $sample: { size: 3 }, // Limit to 3 random movies
+        },
+      ]);
+
+      if (!randomMovies || randomMovies.length === 0) {
+        console.error("No movies found for the given criteria");
+      }
+
+      console.log("movies:", randomMovies);
+      return randomMovies;
     },
   },
 

@@ -1,84 +1,119 @@
-// search form with options for genre and rating
-// import semantic UI
+// search form with options for genre and imdbRating
+// import search options
+import { genreOptions, ratingOptions } from "../utils/searchOptions";
+// import hooks
+import { useState, useEffect } from "react";
+import { useQuery } from "@apollo/client";
+// import movie query
+import { QUERY_MOVIES } from "../utils/queries";
+// import react components
+import { Form, FormGroup, Button, Container } from "semantic-ui-react";
 
+export default function SearchForm() {
 
-// genre options
-const genreOptions = [
-  { key: 1, text: "", value: 1 },
-  { key: 2, text: "Action", value: 2 },
-  { key: 3, text: "Adventure", value: 3 },
-  { key: 4, text: "Animation", value: 4 },
-  { key: 5, text: "Biography", value: 5 },
-  { key: 6, text: "Comedy", value: 6 },
-  { key: 7, text: "Crime", value: 7 },
-  { key: 8, text: "Drama", value: 8 },
-  { key: 9, text: "Family", value: 9 },
-  { key: 10, text: "Fantasy", value: 10 },
-  { key: 11, text: "History", value: 11 },
-  { key: 12, text: "Horror", value: 12 },
-  { key: 13, text: "Music", value: 13 },
-  { key: 14, text: "Mystery", value: 14 },
-  { key: 15, text: "Romance", value: 15 },
-  { key: 16, text: "Sci - Fi", value: 16 },
-  { key: 17, text: "Short", value: 17 },
-  { key: 18, text: "Thriller", value: 18 },
-  { key: 19, text: "War", value: 19 },
-];
+  // create state for holding search criteria
+  const [searchFormData, setSearchFormData] = useState({ genre: '', imdbRating: null});
+  // create state for when form is submitted
+  const [isSubmitted, setIsSubmitted] = useState(false);
+  
+  const { loading, error, data } = useQuery(QUERY_MOVIES, {
+    variables: { genre: searchFormData.genre, imdbRating: searchFormData.imdbRating },
+    skip: !isSubmitted,
+  });
 
-// rating options
-const ratingOptions = [
-  { key: 1, text: "", value: 1 },
-  { key: 1, text: "Abysmal", value: 1 },
-  { key: 2, text: "Bad", value: 2 },
-  { key: 3, text: "Average", value: 3 },
-  { key: 4, text: "Good", value: 4 },
-  { key: 5, text: "Excellent", value: 5 },
-];
+  const movies = data?.movies || [];
 
-export default function SearchForm(props) {
+  // function to handle field change
+  const handleChange = (event) => {
+    event.preventDefault();
+
+    const { name, value } = event.target;
+    setSearchFormData({ ...searchFormData, [name]: value});
+  }
+
+  // function to handle movie search and set state on form submit
+  const handleFormSubmit = async (event) => {
+    event.preventDefault();
+    // execute query when form is submitted
+    setIsSubmitted(true);
+    // reset form fields
+    setSearchFormData({
+      genre: '',
+      imdbRating: null,
+    });
+  }
     
     return (
-      <div className="search-form">
-        <form className="form">
-          <div className="two fields">
-
-            <div className="field genres">
-              <div className="select-genre">
-                <select className="ui fluid dropdown">
-                  <option value="" disabled selected>
-                    Select Genre
-                  </option>
+      <>
+        {/* search form */}
+        <Container>
+          <Form className="search-form" onSubmit={handleFormSubmit}>
+            <FormGroup className="two fields">
+              <Form.Field className="field genre" width={5} required>
+                <select
+                  className="dropdown select-genre"
+                  name="genre"
+                  value={searchFormData.genre}
+                  onChange={handleChange}
+                >
+                  <option value="">Select Genre</option>
                   {genreOptions.map((option) => (
-                    <option key={option.key} value={option.text}>
+                    <option key={option.key} value={option.value}>
                       {option.text}
                     </option>
                   ))}
                 </select>
-              </div>
-            </div>
+              </Form.Field>
 
-            <div className="field rating">
-              <div className="select-rating">
-                <select className="dropdown">
-                  <option value="" disabled selected>
-                    Select Rating
-                  </option>
+              <Form.Field className="field imdbRating" width={5} required>
+                <select
+                  className="dropdown select-imdbRating"
+                  name="imdbRating"
+                  value={searchFormData.imdbRating}
+                  onChange={handleChange}
+                >
+                  <option value={undefined}>Select Rating</option>
                   {ratingOptions.map((option) => (
-                    <option key={option.key} value={option.text}>
+                    <option key={option.key} value={option.value}>
                       {option.text}
                     </option>
                   ))}
                 </select>
-              </div>
-            </div>
+              </Form.Field>
+            </FormGroup>
+            <br />
 
-        
-          </div>
-          <br />
+            <Button
+              type="submit"
+              size="huge"
+              className="btn-find-movies"
+              disabled={!searchFormData.genre || !searchFormData.imdbRating}
+            >
+              Find Movies!
+            </Button>
+          </Form>
+        </Container>
+        <br />
 
-          <button type="submit" className="btn-find-movies">Find Movies!</button>
-        </form>
-      </div>
+        {/* search results */}
+        <Container>
+          {loading && <div>Finding Movies...</div>}
+          {error && <div>Error fetching movies: {error.message}</div>}
+          {movies.length > 0 && (
+            <>
+              {/* map through movies and display data */}
+              {movies.map((movie) => (
+                <div key={movie._id}>
+                  <h3>{movie.title}</h3>
+                </div>
+              ))}
+            </>
+          )}
+          {movies.length === 0 && isSubmitted && !loading && (
+            <div>No movies found matching your criteria! Please try again.</div>
+          )}
+        </Container>
+      </>
     );
 }
 
