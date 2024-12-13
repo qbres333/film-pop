@@ -11,7 +11,7 @@ function Nav({ currentPage, handlePageChange }) {
                 <ButtonGroup className='login-signup' size='medium' floated='right' inverted color='blue'>
                     <Button>
                         <Link to="/signup" 
-                            onClick={() => handlePageChange('Signup')}
+                            // onClick={() => handlePageChange('Signup')}
                             className={currentPage === 'Signup' ? 'nav-link active' : 'nav-link'}
                         >
                             Signup
@@ -20,7 +20,7 @@ function Nav({ currentPage, handlePageChange }) {
                     <ButtonOr />
                     <Button>
                         <Link to="/login"
-                            onClick={() => handlePageChange('Login')}
+                            // onClick={() => handlePageChange('Login')}
                             className={currentPage === 'Login' ? 'nav-link active' : 'nav-link'}
                         >
                             Login
