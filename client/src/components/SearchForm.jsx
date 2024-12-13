@@ -2,7 +2,7 @@
 // import search options
 import { genreOptions, ratingOptions } from "../utils/searchOptions";
 // import hooks
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useQuery } from "@apollo/client";
 // import movie query
 import { QUERY_MOVIES } from "../utils/queries";
@@ -13,9 +13,12 @@ export default function SearchForm() {
 
   // create state for holding search criteria
   const [searchFormData, setSearchFormData] = useState({ genre: '', rating: ''});
+  // create state for when form is submitted
+  const [isSubmitted, setIsSubmitted] = useState(false);
   
   const { loading, error, data } = useQuery(QUERY_MOVIES, {
     variables: { ...searchFormData },
+    skip: !isSubmitted,
   });
   const movies = data?.movies || [];
 
@@ -28,7 +31,8 @@ export default function SearchForm() {
   // function to handle movie search and set state on form submit
   const handleFormSubmit = async (event) => {
     event.preventDefault();
-
+    // execute query when form is submitted
+    setIsSubmitted(true);
     // reset form fields
     setSearchFormData({
       genre: '',
@@ -40,21 +44,18 @@ export default function SearchForm() {
       <>
         {/* search form */}
         <Container>
-          <Form
-            className="search-form"
-            onSubmit={handleFormSubmit}
-          >
+          <Form className="search-form" onSubmit={handleFormSubmit}>
             <FormGroup className="two fields">
               <Form.Field className="field genre" width={5} required>
-                <select className="dropdown select-genre">
+                <select
+                  className="dropdown select-genre"
+                  name="genre"
+                  value={searchFormData.genre}
+                  onChange={handleChange}
+                >
                   <option value="">Select Genre</option>
                   {genreOptions.map((option) => (
-                    <option
-                      key={option.key}
-                      value={option.value}
-                      name="genre"
-                      onChange={handleChange}
-                    >
+                    <option key={option.key} value={option.value}>
                       {option.text}
                     </option>
                   ))}
@@ -62,15 +63,15 @@ export default function SearchForm() {
               </Form.Field>
 
               <Form.Field className="field rating" width={5} required>
-                <select className="dropdown select-rating">
+                <select
+                  className="dropdown select-rating"
+                  name="rating"
+                  value={searchFormData.rating}
+                  onChange={handleChange}
+                >
                   <option value="">Select Rating</option>
                   {ratingOptions.map((option) => (
-                    <option
-                      key={option.key}
-                      value={option.value}
-                      name="rating"
-                      onChange={handleChange}
-                    >
+                    <option key={option.key} value={option.value}>
                       {option.text}
                     </option>
                   ))}
@@ -105,7 +106,9 @@ export default function SearchForm() {
               ))}
             </>
           )}
-          {movies.length === 0 && !loading && <div>No movies found matching your criteria! Please try again.</div>}
+          {movies.length === 0 && isSubmitted && !loading && (
+            <div>No movies found matching your criteria! Please try again.</div>
+          )}
         </Container>
       </>
     );

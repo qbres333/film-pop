@@ -10,9 +10,7 @@ export const QUERY_MOVIES = gql`
       plot
       runtime
       year
-      imdb {
-        rating
-      }
+      imdbRating
     }
   }
 `;
