@@ -1,7 +1,7 @@
 import React from 'react';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { FormInput, Button, Form, Header } from 'semantic-ui-react';
+import { FormInput, Button, Form } from 'semantic-ui-react';
 
 import { useMutation } from '@apollo/client';
 import { ADD_USER } from '../utils/mutations';
