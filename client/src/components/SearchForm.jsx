@@ -2,8 +2,7 @@
 // import search options
 import { genreOptions, ratingOptions } from "../utils/searchOptions";
 // import hooks
-import { useState, useEffect } from "react";
-// import { useLazyQuery } from "@apollo/client";
+import { useState } from "react";
 import { useQuery } from "@apollo/client";
 // import movie query
 import { QUERY_MOVIES } from "../utils/queries";
@@ -126,7 +125,6 @@ export default function SearchForm() {
           <div className="movie-card-container">
             {/* map through movies and display data */}
             {movies.map((movie) => (
-              // <div key={movie._id}> {movie.title} </div>
               <MovieCard
                 key={movie._id}
                 poster={movie.poster}

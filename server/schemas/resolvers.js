@@ -9,7 +9,7 @@ const resolvers = {
         const userData = await User.find({
           _id: context.user._id,
         }).populate({
-          path: "movieLists",
+          path: "savedMovies",
           populate: {
             path: "movies",
           },
@@ -20,7 +20,8 @@ const resolvers = {
         throw Error("User not authenticated");
       }
     },
-    moviesByGenreAndRating: async (parent, { genre, imdbRating}) => {
+
+    moviesByGenreAndRating: async (parent, { genre, imdbRating }) => {
       const minRating = imdbRating - 1;
       const maxRating = imdbRating + 1;
 
@@ -70,6 +71,29 @@ const resolvers = {
 
       return { token, user };
     },
+
+    addMovieToList: async (parent, { _id }, context) => {
+      if (context.user) {
+        const existingMovie = await Movie.findById({_id: _id});
+
+        await User.findByIdAndUpdate(context.user._id, {
+          $push: { savedMovies: existingMovie._id },
+        });
+
+        return existingMovie;
+      }
+      throw AuthenticationError;
+    },
+
+    deleteMovieFromList: async (parent, { _id }, context) => {
+      if (context.user) {
+        await User.findByIdAndUpdate(context.user._id, {
+          $pull: { savedMovies: { _id } }
+        });
+        return true;
+      }
+      throw AuthenticationError;
+    }
   },
 };
 
