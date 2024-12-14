@@ -9,6 +9,7 @@ import { useQuery } from "@apollo/client";
 import { QUERY_MOVIES } from "../utils/queries";
 // import react components
 import { Form, FormGroup, Button, Container } from "semantic-ui-react";
+import MovieCard from "./MovieCard";
 
 export default function SearchForm() {
 
@@ -29,6 +30,8 @@ export default function SearchForm() {
     },
     // Skip the query until the form is submitted
     skip: !isSubmitted,
+    // Doesn't check cache before making a network request so results are always random
+    fetchPolicy: "network-only",
   });
 
   // function to handle field change
@@ -47,11 +50,8 @@ export default function SearchForm() {
 
   }
 
-  if (loading) {
-    return <div>Finding Movies...</div>;
-  };
   if (data) {
-    setMovies(data.moviesByGenreAndRating || []);
+    setMovies(data.moviesByGenreAndRating);
     setErrorMsg("");
     // log the results
     const results = data.moviesByGenreAndRating;
@@ -123,16 +123,26 @@ export default function SearchForm() {
       {/* search results */}
       <Container>
         {movies.length > 0 && (
-          <div>
+          <div className="movie-card-container">
             {/* map through movies and display data */}
             {movies.map((movie) => (
-              <div key={movie._id}> {movie.title} </div>
+              // <div key={movie._id}> {movie.title} </div>
+              <MovieCard
+                key={movie._id}
+                poster={movie.poster}
+                title={movie.title}
+                year={movie.year}
+                genre={movie.genre.join(", ")}
+                runtime={movie.runtime}
+                plot={movie.plot}
+                imdbRating={movie.imdbRating}
+              />
             ))}
           </div>
         )}
-        {/* {movies.length === 0 && isSubmitted && (
-          <div>No movies found matching your criteria! Please try again.</div>
-        )} */}
+        {movies.length === 0 && isSubmitted && !loading && (
+          <div>No movies found matching your criteria!</div>
+        )}
       </Container>
     </>
   );
