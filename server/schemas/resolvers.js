@@ -6,14 +6,20 @@ const resolvers = {
     user: async (parent, args, context) => {
       if (context.user) {
         // retrieve user data, populated with movieLists and movies
-        const userData = await User.find({
-          _id: context.user._id,
-        }).populate("savedMovies");
+        const userData = await User.findById(context.user._id).populate("savedMovies");
 
         return userData;
-      } else {
-        throw Error("User not authenticated");
+      } 
+      throw Error("User not authenticated");
+    },
+    
+    me: async (parent, args, context) => {
+      if (context.user) {
+        const savedMovieList = await User.findById(context.user._id).populate('savedMovies')
+
+        return savedMovieList;
       }
+      throw AuthenticationError;
     },
 
     moviesByGenreAndRating: async (parent, { genre, imdbRating }) => {
@@ -42,11 +48,11 @@ const resolvers = {
   },
 
   Mutation: {
-    addUser: async (parent, args) => {
-      const user = await User.create(args);
-      const token = signToken(user);
+    addUser: async (parent, { username, email, password }) => {
+        const user = await User.create({ username, email, password });
+        const token = signToken(user);
 
-      return { token, user };
+        return { token, user };
     },
 
     login: async (parent, { email, password }) => {

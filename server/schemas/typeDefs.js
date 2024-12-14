@@ -24,6 +24,7 @@ const typeDefs = `
     
     type Query {
       user: User
+      me: User
       moviesByGenreAndRating(genre: String, imdbRating: Float): [Movie]
     }
 
