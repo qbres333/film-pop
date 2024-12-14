@@ -59,12 +59,15 @@ const resolvers = {
       const user = await User.findOne({ email });
 
       if (!user) {
+        // console.log('user does not exist')
         throw AuthenticationError;
       }
 
       const correctPw = await user.isCorrectPassword(password);
 
       if (!correctPw) {
+        // console.log('incorrect password')
+        // console.log(password)
         throw AuthenticationError;
       }
 
