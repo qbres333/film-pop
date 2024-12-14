@@ -20,6 +20,12 @@ const userSchema = new Schema({
     required: true,
     minlength: 5,
   },
+  savedMovies: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "Movie",
+    },
+  ],
 });
 
 // Set up pre-save middleware to create password

@@ -2,7 +2,8 @@ import popcorn from "../images/popcorn.png";
 
 export default function Header() {
   return (
-    <div className="filmpop-container">
+    <>
+      <div className="filmpop-container">
         <h1 className="knewave-regular">
           <img
             src={popcorn}
@@ -12,6 +13,9 @@ export default function Header() {
           ></img>
           FilmPop
         </h1>
-    </div>
+      </div>
+      <div className="knewave-input sub-title">Random Movie Generator</div>
+    </>
   );
+  
 }
