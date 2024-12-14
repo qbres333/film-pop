@@ -26,7 +26,6 @@ export const ADD_USER = gql`
 export const ADD_MOVIE = gql`
   mutation addMovieToList($_id: ID!) {
     addMovieToList(_id: $_id) {
-      user {
         _id
         username
         email
@@ -35,7 +34,6 @@ export const ADD_MOVIE = gql`
           title
         }
       }
-    }
   }
 `;
 
