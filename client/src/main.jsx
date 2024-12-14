@@ -10,6 +10,7 @@ import Home from './pages/Home.jsx';
 import ErrorPage from './pages/Error.jsx';
 import Login from './pages/Login.jsx';
 import Signup from './pages/Signup.jsx';
+import MyMovies from './pages/MyMovies.jsx';
 
 
 const router = createBrowserRouter([
@@ -29,6 +30,10 @@ const router = createBrowserRouter([
       {
         path: "/signup",
         element: <Signup />,
+      },
+      {
+        path: "/mymovies",
+        element: <MyMovies />,
       },
     ],
   },
