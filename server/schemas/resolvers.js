@@ -24,13 +24,6 @@ const resolvers = {
       const minRating = imdbRating - 1;
       const maxRating = imdbRating + 1;
 
-      // const randomMovies = await Movie.find(
-      //   {
-      //     genre: { $in: [genre] },
-      //     imdbRating: { $gt: minRating, $lte: maxRating },
-      //   },
-      // );
-
       const randomMovies = await Movie.aggregate([
         {
           $match: {
@@ -44,10 +37,10 @@ const resolvers = {
       ]);
 
       if (!randomMovies || randomMovies.length === 0) {
-        console.error("No movies found for the given criteria");
+        console.error("No movies found with the given criteria!");
       }
 
-      console.log("movies:", randomMovies);
+      console.log("Movies:", randomMovies);
       return randomMovies;
     },
   },
