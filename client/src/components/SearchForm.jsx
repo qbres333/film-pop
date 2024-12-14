@@ -127,6 +127,7 @@ export default function SearchForm() {
             {movies.map((movie) => (
               <MovieCard
                 key={movie._id}
+                id={movie._id} // for adding movie to list
                 poster={movie.poster}
                 title={movie.title}
                 year={movie.year}
