@@ -8,12 +8,7 @@ const resolvers = {
         // retrieve user data, populated with movieLists and movies
         const userData = await User.find({
           _id: context.user._id,
-        }).populate({
-          path: "savedMovies",
-          populate: {
-            path: "movies",
-          },
-        });
+        }).populate("savedMovies");
 
         return userData;
       } else {
@@ -74,26 +69,30 @@ const resolvers = {
 
     addMovieToList: async (parent, { _id }, context) => {
       if (context.user) {
-        const existingMovie = await Movie.findById({_id: _id});
+        const existingMovie = await Movie.findById(_id);
 
-        await User.findByIdAndUpdate(context.user._id, {
-          $push: { savedMovies: existingMovie._id },
-        });
+        const updatedUser = await User.findByIdAndUpdate(
+          context.user._id,
+          { $push: { savedMovies: existingMovie._id } },
+          { new: true } //return updated User document
+        ).populate("savedMovies"); //show updated movie list
 
-        return existingMovie;
+        return updatedUser;
       }
       throw AuthenticationError;
     },
 
     deleteMovieFromList: async (parent, { _id }, context) => {
       if (context.user) {
-        await User.findByIdAndUpdate(context.user._id, {
-          $pull: { savedMovies: { _id } }
-        });
-        return true;
+        const updatedUser = await User.findByIdAndUpdate(
+          context.user._id,
+          { $pull: { savedMovies: { _id } } },
+          { new: true }
+        ).populate("savedMovies");
+        return updatedUser;
       }
       throw AuthenticationError;
-    }
+    },
   },
 };
 
