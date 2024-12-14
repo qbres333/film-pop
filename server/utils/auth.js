@@ -1,8 +1,9 @@
 // Obtained following lines of code from Module 22 Activity #22
 const { GraphQLError } = require('graphql');
 const jwt = require('jsonwebtoken');
+require("dotenv").config({ path: "../.env" });
 
-const secret = 'mysecretssshhhhhhh';
+const secret = process.env.AUTH_SECRET;
 const expiration = '2h';
 
 module.exports = {
@@ -34,8 +35,8 @@ module.exports = {
 
     return req;
   },
-  signToken({ firstName, email, _id }) {
-    const payload = { firstName, email, _id };
+  signToken({ username, email, _id }) {
+    const payload = { username, email, _id };
 
     return jwt.sign({ data: payload }, secret, { expiresIn: expiration });
   },

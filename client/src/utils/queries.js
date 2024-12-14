@@ -17,11 +17,40 @@ export const QUERY_MOVIES = gql`
 
 export const QUERY_USER = gql`
   {
-    me {
+    user {
       _id
       username
       email
+      savedMovies {
+        _id
+        title
+        poster
+        genre
+        plot
+        runtime
+        year
+        imdbRating
+      }
     }
   }
 `;
 
+export const QUERY_ME = gql`
+  {
+    me {
+      _id
+      username
+      email
+      savedMovies {
+        _id
+        title
+        poster
+        genre
+        plot
+        runtime
+        year
+        imdbRating
+      }
+    }
+  }
+`;

@@ -17,6 +17,10 @@ const app = express();
 const server = new ApolloServer({
   typeDefs,
   resolvers,
+  context: async ({req}) => {
+    const user = req.user;
+    return { user };
+  }
 });
 
 // Create a new instance of an Apollo server with the GraphQL schema
