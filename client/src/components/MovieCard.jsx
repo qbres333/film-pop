@@ -1,16 +1,19 @@
 // components: Reveal - shows movie poster and name, then reveals other movie data when hovered on (might include trailer; see Embed component)
 import React from 'react';
-import { Button, RevealContent, Image, Reveal, Container, Embed } from 'semantic-ui-react';
+import { Message, Button, RevealContent, Image, Reveal, Container, Embed } from 'semantic-ui-react';
 import DefaultPoster from "../images/film_slate.jpg";
 
 import Auth from '../utils/auth';
 import { ADD_MOVIE } from '../utils/mutations';
 import { useMutation } from '@apollo/client';
+import { useState } from 'react';
 
 
 export default function MovieCard(props) {
   // send mutation
   const [addMovie] = useMutation(ADD_MOVIE);
+  // State for success message
+  const [successMessage, setSuccessMessage] = useState('');
   const handleError = (e) => {
     e.target.src = DefaultPoster;
   }
@@ -54,6 +57,10 @@ export default function MovieCard(props) {
                         }
                       })
                       console.log('Your movie has been added to your collection!')
+                      setSuccessMessage('Movie successfully added to your collection!');
+
+                      // Hide the message after 4 seconds
+                      setTimeout(() => setSuccessMessage(''), 4000);
                     }}>
                       Add to List
                     </Button>
