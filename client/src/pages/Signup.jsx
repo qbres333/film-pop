@@ -1,7 +1,7 @@
-import React from 'react';
+// import React from 'react';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { FormInput, Button, Form } from 'semantic-ui-react';
+import { FormInput, Button, Form, Message } from 'semantic-ui-react';
 
 import { useMutation } from '@apollo/client';
 import { ADD_USER } from '../utils/mutations';
@@ -29,14 +29,24 @@ const Signup = () => {
   // submit form
   const handleFormSubmit = async (event) => {
     event.preventDefault();
-    console.log(formState);
+    console.log(formState.username);
 
     try {
-      const { data } = await addUser({
-        variables: { ...formState },
-      });
+      // const { data } = await addUser({
+      //   variables: { ...formState },
+      // });
 
-      Auth.login(data.addUser.token);
+      // mod 22 act 26
+      // mutation hook expects an object with named variables
+      const mutationResponse = await addUser({
+        variables: {
+          email: formState.email,
+          password: formState.password,
+          username: formState.username,
+        },
+      });
+      const token = mutationResponse.data.addUser.token;
+      Auth.login(token);
     } catch (e) {
       console.error(e);
     }
@@ -44,16 +54,25 @@ const Signup = () => {
 
   return (
     <>
-      <h1 as='h3' textAlign='center' className='knewave-signup'> Sign Up Form </h1>
+      <h1 as="h3" textAlign="center" className="knewave-signup">
+        {" "}
+        Sign Up Form{" "}
+      </h1>
       {data ? (
         <p>
-          Success! You may now head{' '}
-          <Link to="/">back to the homepage.</Link>
+          Success! You may now head <Link to="/">back to the homepage.</Link>
         </p>
       ) : (
         <Form onSubmit={handleFormSubmit}>
           <FormInput
-            label={<label className='knewave-input' style={{ color: 'white', textAlign: 'left' }}>Username:</label>}
+            label={
+              <label
+                className="knewave-input"
+                style={{ color: "white", textAlign: "left" }}
+              >
+                Username:
+              </label>
+            }
             placeholder="Your username"
             name="username"
             type="text"
@@ -61,7 +80,14 @@ const Signup = () => {
             onChange={handleChange}
           />
           <FormInput
-            label={<label className='knewave-input' style={{ color: 'white', textAlign: 'left' }}>Email:</label>}
+            label={
+              <label
+                className="knewave-input"
+                style={{ color: "white", textAlign: "left" }}
+              >
+                Email:
+              </label>
+            }
             placeholder="Enter your email"
             name="email"
             type="email"
@@ -69,7 +95,14 @@ const Signup = () => {
             onChange={handleChange}
           />
           <FormInput
-            label={<label className='knewave-input' style={{ color: 'white', textAlign: 'left' }}>Password:</label>}
+            label={
+              <label
+                className="knewave-input"
+                style={{ color: "white", textAlign: "left" }}
+              >
+                Password:
+              </label>
+            }
             placeholder="*********"
             name="password"
             type="password"
@@ -77,10 +110,10 @@ const Signup = () => {
             onChange={handleChange}
           />
           <Button
-            inverted color='blue'
-            size='large'
-            floated='left'
-            style={{ cursor: 'pointer' }}
+            inverted
+            color="blue"
+            size="large"
+            style={{ cursor: "pointer" }}
             type="submit"
           >
             Submit
@@ -89,11 +122,7 @@ const Signup = () => {
       )}
 
       {error && (
-        <Message
-          error
-          header="Error signing up!"
-          content={error.message}
-        />
+        <Message error header="Error signing up!" content={error.message} />
       )}
     </>
   );

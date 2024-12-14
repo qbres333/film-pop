@@ -22,10 +22,9 @@ const typeDefs = `
       imdbRating: Float
     }
     
-    
-    }
     type Query {
       user: User
+      me: User
       moviesByGenreAndRating(genre: String, imdbRating: Float): [Movie]
     }
 
@@ -36,8 +35,8 @@ const typeDefs = `
         password: String!
       ): Auth
       login(email: String!, password: String!): Auth
-      addMovieToList(_id: ID): Movie
-      deleteMovieFromList(_id: ID): Boolean
+      addMovieToList(_id: ID): User
+      deleteMovieFromList(_id: ID): User
     }
 `;
 

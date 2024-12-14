@@ -6,19 +6,20 @@ const resolvers = {
     user: async (parent, args, context) => {
       if (context.user) {
         // retrieve user data, populated with movieLists and movies
-        const userData = await User.find({
-          _id: context.user._id,
-        }).populate({
-          path: "savedMovies",
-          populate: {
-            path: "movies",
-          },
-        });
+        const userData = await User.findById(context.user._id).populate("savedMovies");
 
         return userData;
-      } else {
-        throw Error("User not authenticated");
+      } 
+      throw Error("User not authenticated");
+    },
+    
+    me: async (parent, args, context) => {
+      if (context.user) {
+        const savedMovieList = await User.findById(context.user._id).populate('savedMovies')
+
+        return savedMovieList;
       }
+      throw AuthenticationError;
     },
 
     moviesByGenreAndRating: async (parent, { genre, imdbRating }) => {
@@ -47,11 +48,11 @@ const resolvers = {
   },
 
   Mutation: {
-    addUser: async (parent, args) => {
-      const user = await User.create(args);
-      const token = signToken(user);
+    addUser: async (parent, { username, email, password }) => {
+        const user = await User.create({ username, email, password });
+        const token = signToken(user);
 
-      return { token, user };
+        return { token, user };
     },
 
     login: async (parent, { email, password }) => {
@@ -74,26 +75,30 @@ const resolvers = {
 
     addMovieToList: async (parent, { _id }, context) => {
       if (context.user) {
-        const existingMovie = await Movie.findById({_id: _id});
+        const existingMovie = await Movie.findById(_id);
 
-        await User.findByIdAndUpdate(context.user._id, {
-          $push: { savedMovies: existingMovie._id },
-        });
+        const updatedUser = await User.findByIdAndUpdate(
+          context.user._id,
+          { $push: { savedMovies: existingMovie._id } },
+          { new: true } //return updated User document
+        ).populate("savedMovies"); //show updated movie list
 
-        return existingMovie;
+        return updatedUser;
       }
       throw AuthenticationError;
     },
 
     deleteMovieFromList: async (parent, { _id }, context) => {
       if (context.user) {
-        await User.findByIdAndUpdate(context.user._id, {
-          $pull: { savedMovies: { _id } }
-        });
-        return true;
+        const updatedUser = await User.findByIdAndUpdate(
+          context.user._id,
+          { $pull: { savedMovies: { _id } } },
+          { new: true }
+        ).populate("savedMovies");
+        return updatedUser;
       }
       throw AuthenticationError;
-    }
+    },
   },
 };
 

@@ -28,12 +28,17 @@ const Login = () => {
     event.preventDefault();
 
     try {
-      const { data } = await login({
-        variables: { ...formState },
+      const mutationResponse = await login({
+        variables: {
+          email: formState.email,
+          password: formState.password,
+        },
       });
 
-      console.log(data);
-      Auth.login(data.login.token);
+      console.log(formState.email);
+
+      const token = mutationResponse.data.login.token;
+      Auth.login(token);
     } catch (e) {
       console.error(e);
     }
@@ -47,12 +52,22 @@ const Login = () => {
 
   return (
     <>
-      <h1 as='h3' textAlign='center' className='knewave-signup'> Login Form </h1>
+      <h1 as="h3" textAlign="center" className="knewave-signup">
+        {" "}
+        Login Form{" "}
+      </h1>
 
       {/* Login Form */}
       <Form onSubmit={handleFormSubmit}>
         <FormInput
-          label={<label className='knewave-input' style={{ color: 'white', textAlign: 'left' }}>Email:</label>}
+          label={
+            <label
+              className="knewave-input"
+              style={{ color: "white", textAlign: "left" }}
+            >
+              Email:
+            </label>
+          }
           type="email"
           name="email"
           placeholder="Your email"
@@ -61,7 +76,14 @@ const Login = () => {
           required
         />
         <FormInput
-          label={<label className='knewave-input' style={{ color: 'white', textAlign: 'left' }}>Password:</label>}
+          label={
+            <label
+              className="knewave-input"
+              style={{ color: "white", textAlign: "left" }}
+            >
+              Password:
+            </label>
+          }
           type="password"
           name="password"
           placeholder="*******"
@@ -71,10 +93,10 @@ const Login = () => {
         />
 
         <Button
-          inverted color='blue'
-          size='large'
-          floated='left'
-          style={{ cursor: 'pointer' }}
+          inverted
+          color="blue"
+          size="large"
+          style={{ cursor: "pointer" }}
           type="submit"
           primary
           disabled={!(formState.email && formState.password)}
@@ -84,11 +106,7 @@ const Login = () => {
       </Form>
 
       {error && (
-        <Message
-          error
-          header="Error loggin in!"
-          content={error.message}
-        />
+        <Message error header="Error logging in!" content={error.message} />
       )}
     </>
   );
