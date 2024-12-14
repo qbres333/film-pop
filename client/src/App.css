@@ -32,7 +32,13 @@
 .filmpop-container {
   display: flex;
   justify-content: center;
-  padding-bottom: 3em;
+  align-self: center;
+  padding-bottom: 1em;
+}
+
+.sub-title {
+  font-size: 20px;
+  padding-bottom: 2em;
 }
 
 .login-signup {
@@ -84,6 +90,7 @@ body {
 
 .movie-card, .movie-visible, .movie-hidden {
   width: 300px;
+  border-radius: 5px;
 }
 
 .movie-hidden {
