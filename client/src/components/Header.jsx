@@ -14,7 +14,7 @@ export default function Header() {
           FilmPop
         </h1>
       </div>
-      <div className="knewave-input sub-title">Random Movie Generator</div>
+      <div className="sub-title"><i>Movie Roulette</i></div>
     </>
   );
   

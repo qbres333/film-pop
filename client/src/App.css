@@ -4,7 +4,7 @@
   display: flex;
   min-height: 100vh;
   justify-content: center;
-  padding: 4rem;
+  padding: 4rem 2rem 4rem 2rem;
   text-align: center;
   color: rgb(212, 219, 221);
   background-color: #213547;
@@ -33,12 +33,13 @@
   display: flex;
   justify-content: center;
   align-self: center;
-  padding-bottom: 1em;
+  /* padding-bottom: 1em; */
 }
 
 .sub-title {
   font-size: 20px;
   padding-bottom: 2em;
+  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
 }
 
 .login-signup {
@@ -89,30 +90,61 @@ body {
 }
 
 .movie-card, .movie-visible, .movie-hidden {
-  width: 300px;
-  border-radius: 5px;
+  width: 310px;
+  /* height: 280px; */
+  border-radius: 15px;
+}
+
+/* Enable scrolling for movies with small cards */
+.hidden-movie-content {
+  height: auto;
+  overflow-y: auto;
+}
+
+.btn-add-movie {
+  margin-top: 20px;
 }
 
 .movie-hidden {
   text-align: justify;
   padding: 20px;
 }
+
 .movie-title-hidden {
   font-weight: 500;
   text-align: center;
   color: var(--btn-text);
   margin-bottom: 10px;
 }
-.movie-card-container{
+
+.movie-card-container {
   display: flex;
   flex-direction: row;
   justify-content: space-evenly;
   align-items: center;
 }
 
+.title-overlay {
+  position: absolute;
+  top: 85%;
+  /* center the text at bottom of the element*/
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
 .movie-data {
   margin-bottom: 4px;
   color: var(--btn-background);
+}
+
+.saved-movie-container {
+  display: inline-flex;
+  flex-direction: row;
+}
+
+.saved-movie-card {
+  width: 310px;
+  margin: 20px;
 }
 
 @media (max-width: 820px) {
