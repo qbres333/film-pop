@@ -26,28 +26,40 @@ export const ADD_USER = gql`
 export const ADD_MOVIE = gql`
   mutation addMovieToList($_id: ID!) {
     addMovieToList(_id: $_id) {
+      _id
+      username
+      email
+      savedMovies {
         _id
-        username
-        email
-        savedMovies {
-          _id
-          title
-        }
+        title
+        poster
+        genre
+        plot
+        runtime
+        year
+        imdbRating
       }
+    }
   }
 `;
 
 export const DELETE_MOVIE = gql`
   mutation deleteMovieFromList($_id: ID!) {
     deleteMovieFromList(_id: $_id) {
+      _id
+      username
+      email
+      savedMovies {
         _id
-        username
-        email
-        savedMovies {
-          _id
-          title
-        }
+        title
+        poster
+        genre
+        plot
+        runtime
+        year
+        imdbRating
       }
+    }
   }
 `;
 

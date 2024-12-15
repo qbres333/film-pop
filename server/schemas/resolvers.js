@@ -6,7 +6,10 @@ const resolvers = {
     user: async (parent, args, context) => {
       if (context.user) {
         // retrieve user data, populated with movieLists and movies
-        const userData = await User.findById(context.user._id).populate("savedMovies");
+        const userData = await User.findById(context.user._id).populate({
+          path: "savedMovies",
+          model: 'Movie',
+        });
 
         return userData;
       } 
@@ -15,7 +18,10 @@ const resolvers = {
     
     me: async (parent, args, context) => {
       if (context.user) {
-        const savedMovieList = await User.findById(context.user._id).populate('savedMovies')
+        const savedMovieList = await User.findById(context.user._id).populate({
+          path: "savedMovies",
+          model: "Movie",
+        });
 
         return savedMovieList;
       }
@@ -78,13 +84,21 @@ const resolvers = {
 
     addMovieToList: async (parent, { _id }, context) => {
       if (context.user) {
-        const existingMovie = await Movie.findById(_id);
+        const user = await User.findById(context.user._id);
+
+        if (user.savedMovies.includes(_id)) {
+          throw new Error('Movie is already saved in your movie list')
+        }
+        const movieToSave = await Movie.findById(_id);
 
         const updatedUser = await User.findByIdAndUpdate(
           context.user._id,
-          { $push: { savedMovies: existingMovie._id } },
+          { $push: { savedMovies: movieToSave._id } },
           { new: true } //return updated User document
-        ).populate("savedMovies"); //show updated movie list
+        ).populate({
+          path: "savedMovies",
+          model: "Movie",
+        });//show updated movie list
 
         return updatedUser;
       }
@@ -93,15 +107,22 @@ const resolvers = {
 
     deleteMovieFromList: async (parent, { _id }, context) => {
       if (context.user) {
+        const movieToDelete = await Movie.findById(_id);
+
         const updatedUser = await User.findByIdAndUpdate(
           context.user._id,
-          { $pull: { savedMovies: { _id } } },
+          { $pull: { savedMovies: movieToDelete._id } },
           { new: true }
-        ).populate("savedMovies");
+        ).populate({
+          path: "savedMovies",
+          model: "Movie",
+        });
+
         return updatedUser;
       }
       throw AuthenticationError;
     },
+
   },
 };
 
