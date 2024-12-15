@@ -33,7 +33,6 @@
   display: flex;
   justify-content: center;
   align-self: center;
-  /* padding-bottom: 1em; */
 }
 
 .sub-title {
@@ -91,7 +90,6 @@ body {
 
 .movie-card, .movie-visible, .movie-hidden {
   width: 310px;
-  /* height: 280px; */
   border-radius: 15px;
 }
 

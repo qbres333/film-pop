@@ -29,13 +29,8 @@ const Signup = () => {
   // submit form
   const handleFormSubmit = async (event) => {
     event.preventDefault();
-    console.log(formState.username);
 
     try {
-      // const { data } = await addUser({
-      //   variables: { ...formState },
-      // });
-
       // mod 22 act 26
       // mutation hook expects an object with named variables
       const mutationResponse = await addUser({
