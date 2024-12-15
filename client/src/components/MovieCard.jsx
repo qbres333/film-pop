@@ -64,6 +64,10 @@ export default function MovieCard(props) {
                     }}>
                       Add to List
                     </Button>
+                    {/* Display success message */}
+                    {successMessage && (
+                      <Message>{successMessage}</Message>
+                    )}
                   </div>
                 ) : null}
           </Container>

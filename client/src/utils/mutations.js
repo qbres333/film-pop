@@ -40,7 +40,6 @@ export const ADD_MOVIE = gql`
 export const DELETE_MOVIE = gql`
   mutation deleteMovieFromList($_id: ID!) {
     deleteMovieFromList(_id: $_id) {
-      user {
         _id
         username
         email
@@ -49,7 +48,6 @@ export const DELETE_MOVIE = gql`
           title
         }
       }
-    }
   }
 `;
 
