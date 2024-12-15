@@ -1,13 +1,30 @@
 // Contains the navbar
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { ButtonOr, ButtonGroup, Button } from 'semantic-ui-react';
 import Header from "./Header";
 import Auth from '../utils/auth';
 
 function Nav({ currentPage }) {
+    // Retrieve the current location
+    const location = useLocation();
+
     return (
         <>
+            {location.pathname !== '/' && // if already on home page, do not show the back button
+                <ButtonGroup size="medium" floated="left" inverted color="blue">
+                    <Button>
+                        <Link
+                            to="/"
+                            className={
+                                currentPage === "Signup" ? "nav-link active" : "nav-link"
+                            }
+                        >
+                            Back to Home
+                        </Link>
+                    </Button>
+                </ButtonGroup>
+            }
             {
                 // if user is logged in, show MyMoviesCollection page and Logout button
                 Auth.loggedIn() ?
