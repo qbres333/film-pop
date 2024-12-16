@@ -1,5 +1,6 @@
-![App Name](client/src/images/app-header.png)
-
+<div align="center">
+  <img src="client/src/images/app-header.png" alt="App Name">
+</div>
 
 ## Table Of Contents
 
