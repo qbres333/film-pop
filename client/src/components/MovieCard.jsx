@@ -15,6 +15,8 @@ export default function MovieCard(props) {
   const [successMessage, setSuccessMessage] = useState('');
   // set state for movie poster in case the poster link is dead
   const [isDefaultPoster, setIsDefaultPoster] = useState(false);
+  // set state of movies already added to SavedMovies (for button)
+  const [isButtonClicked, setIsButtonClicked] = useState(false);
 
   const handleError = (e) => {
     e.target.src = DefaultPoster;
@@ -31,7 +33,9 @@ export default function MovieCard(props) {
             className="movie-poster"
             onError={handleError}
           />
-          {isDefaultPoster && <div className='title-overlay'>{props.title}</div>}
+          {isDefaultPoster && (
+            <div className="title-overlay">{props.title}</div>
+          )}
         </RevealContent>
         <RevealContent hidden className="movie-hidden">
           <Container className="hidden-movie-content">
@@ -57,7 +61,10 @@ export default function MovieCard(props) {
                 {/* create function to handle add movie to list */}
                 <Button
                   fluid
+                  disabled={isButtonClicked} // Disable the button if it has been clicked
                   onClick={async () => {
+                    // Prevent repeated clicks; mutation does not allow movies to be added twice
+                    setIsButtonClicked(true);
                     const handleAddMovieToList = await addMovie({
                       variables: {
                         // grab id of movie
@@ -75,7 +82,7 @@ export default function MovieCard(props) {
                     setTimeout(() => setSuccessMessage(""), 4000);
                   }}
                 >
-                  Add to List
+                  {isButtonClicked ? "Saved to My Movies" : "Add to List"}
                 </Button>
                 {/* Display success message */}
                 {successMessage && <Message>{successMessage}</Message>}

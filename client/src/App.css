@@ -13,6 +13,7 @@
   --btn-text: rgb(212, 219, 221);
 }
 
+/* google font */
 .knewave-regular {
   font-family: "Knewave", system-ui;
   font-weight: 400;
@@ -89,23 +90,22 @@ body {
 }
 
 .movie-card, .movie-visible, .movie-hidden {
-  width: 310px;
+  width: 350px;
+  min-height: 300px;
   border-radius: 15px;
 }
 
-/* Enable scrolling for movies with small cards */
-.hidden-movie-content {
-  height: auto;
-  overflow-y: auto;
-}
-
-.btn-add-movie {
-  margin-top: 20px;
+/* set height of movie posters so that hidden data is out of sight until hover; for small posters */
+.movie-poster {
+  object-fit: contain;
+  width: 350px;
+  border-radius: 15px;
 }
 
 .movie-hidden {
   text-align: justify;
   padding: 20px;
+  overflow-y: auto;
 }
 
 .movie-title-hidden {
@@ -135,13 +135,17 @@ body {
   color: var(--btn-background);
 }
 
+.btn-add-movie {
+  margin-top: 20px;
+}
+
 .saved-movie-container {
   display: inline-flex;
   flex-direction: row;
 }
 
 .saved-movie-card {
-  width: 310px;
+  width: 350px;
   margin: 20px;
 }
 
